@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tic Tac Toe</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Arial', sans-serif;
+        }
+        body {
+            background-color: #f0f0f0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .container {
+            text-align: center;
+        }
+        h1 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+        .board {
+            display: grid;
+            grid-template-columns: repeat(3, 100px);
+            grid-template-rows: repeat(3, 100px);
+            gap: 10px;
+            margin: 0 auto;
+        }
+        .cell {
+            width: 100px;
+            height: 100px;
+            background-color: #fff;
+            border: 2px solid #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 2em;
+            cursor: pointer;
+        }
+        .cell:hover {
+            background-color: #f9f9f9;
+        }
+        #message {
+            margin-top: 20px;
+            font-size: 1.5em;
+            color: #28a745;
+        }
+        button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 1em;
+            background-color: #28a745;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #218838;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Tic Tac Toe</h1>
+        <div class="board" id="board">
+            <div class="cell" id="cell0"></div>
+            <div class="cell" id="cell1"></div>
+            <div class="cell" id="cell2"></div>
+            <div class="cell" id="cell3"></div>
+            <div class="cell" id="cell4"></div>
+            <div class="cell" id="cell5"></div>
+            <div class="cell" id="cell6"></div>
+            <div class="cell" id="cell7"></div>
+            <div class="cell" id="cell8"></div>
+        </div>
+        <div id="message"></div>
+        <button onclick="resetGame()">Restart Game</button>
+    </div>
+
+    <script>
+        const board = document.querySelectorAll('.cell');
+        const message = document.getElementById('message');
+        let currentPlayer = 'X';
+        let gameActive = true;
+        let gameState = ["", "", "", "", "", "", "", "", ""];
+
+        const winningConditions = [
+            [0, 1, 2],
+            [3, 4, 5],
+            [6, 7, 8],
+            [0, 3, 6],
+            [1, 4, 7],
+            [2, 5, 8],
+            [0, 4, 8],
+            [2, 4, 6]
+        ];
+
+        board.forEach((cell, index) => {
+            cell.addEventListener('click', () => handleCellClick(cell, index));
+        });
+
+        function handleCellClick(cell, index) {
+            if (gameState[index] !== "" || !gameActive) return;
+
+            gameState[index] = currentPlayer;
+            cell.textContent = currentPlayer;
+
+            checkWinner();
+        }
+
+        function checkWinner() {
+            let roundWon = false;
+
+for (let i = 0; i < winningConditions.length; i++) {
+const [a, b, c] = winningConditions[i];
+if (gameState[a] === "" || gameState[b] === "" || gameState[c] === "") {
+continue;
+}
+if (gameState[a] === gameState[b] && gameState[b] === gameState[c]) {
+roundWon = true;
+break;
+}
+}
+
+if (roundWon) {
+message.textContent = `Player ${currentPlayer} wins!`;
+gameActive = false;
+return;
+}
+
+if (!gameState.includes("")) {
+message.textContent = "It's a draw!";
+gameActive = false;
+ return;
+}
+
+currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
+ }
+
+ function resetGame() {
+gameActive = true;
+currentPlayer = 'X';
+ gameState = ["", "", "", "", "", "", "", "", ""];
+ message.textContent = '';
+board.forEach(cell => (cell.textContent = ''));
+}
+    </script>
+</body>
+</html>
